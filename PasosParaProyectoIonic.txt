@@ -1,0 +1,6 @@
+npm install -g cordova ionic
+ionic start myApp blank --v2
+ionic platform add adroid
+ionic resources
+ionic serve -l
+ionic g page miPagina

@@ -1,14 +1,22 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      Bienvenido!
     </ion-title>
   </ion-navbar>
 </ion-header>
-
-<ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+<ion-content padding scrollbar-y-auto logIn>
+  <ion-list inset>
+    <ion-item>
+      <ion-input type="text" class="textoCentrado" placeholder="Nombre del jugador"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-row>
+        <ion-col class="textoCentrado">
+          <button ion-button>logIn</button>
+        </ion-col>
+      </ion-row>
+    </ion-item>
+  </ion-list>  
+  <button ion-button id="botonAbout" (click)="irAbout()">Sobre el autor</button>
 </ion-content>

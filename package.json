@@ -33,10 +33,10 @@
     "typescript": "~2.2.1"
   },
   "cordovaPlugins": [
-    "cordova-plugin-console",
-    "cordova-plugin-statusbar",
-    "cordova-plugin-device",
     "cordova-plugin-whitelist",
+    "cordova-plugin-console",
+    "cordova-plugin-device",
+    "cordova-plugin-statusbar",
     "cordova-plugin-splashscreen",
     "ionic-plugin-keyboard"
   ],
