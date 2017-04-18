@@ -8,12 +8,12 @@
 <ion-content padding scrollbar-y-auto logIn>
   <ion-list inset>
     <ion-item>
-      <ion-input type="text" class="textoCentrado" placeholder="Nombre del jugador"></ion-input>
+      <ion-input #nombre type="text" placeholder="Nombre del jugador"></ion-input>
     </ion-item>
     <ion-item>
       <ion-row>
         <ion-col class="textoCentrado">
-          <button ion-button>logIn</button>
+          <button ion-button (click)="irGame(nombre.value)">logIn</button>
         </ion-col>
       </ion-row>
     </ion-item>
