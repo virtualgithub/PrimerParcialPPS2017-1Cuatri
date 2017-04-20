@@ -1,12 +1,38 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Trivia diseñada para {{nombre}}</ion-title>
+    <ion-title>{{nombre}}, pregunta N°{{numeroPregunta}} de 3</ion-title>
   </ion-navbar>
 
 </ion-header>
 
+<ion-content padding scrollbar-y-auto>
+  <form [formGroup]="formCuestionario">
+    <ion-list radio-group formControlName="listaOpciones">
 
-<ion-content padding>
+      <ion-list-header>
+        {{pregunta}}
+      </ion-list-header>
 
+      <ion-item>
+        <ion-label>{{opcion1}}</ion-label>
+        <ion-radio value="1" [checked]={{limpia}} (ionSelect)="Jugar($event)"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{opcion2}}</ion-label>
+        <ion-radio value="2" (ionSelect)="Jugar($event)"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{opcion2}}</ion-label>
+        <ion-radio value="3" (ionSelect)="Jugar($event)"></ion-radio>
+      </ion-item>
+
+    </ion-list>
+  </form>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>Correctas {{numeroCorrectas}} ... Incorrectas {{numeroIncorrectas}}</ion-title>
+  </ion-toolbar>
+</ion-footer>

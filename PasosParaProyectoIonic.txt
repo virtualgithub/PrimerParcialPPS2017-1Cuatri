@@ -1,6 +1,18 @@
+INSTALA IONIC
 npm install -g cordova ionic
+CREA UN TEMPLATE VACIO
 ionic start myApp blank --v2
+GENERA LO NECESARIO PARA QUE FUNCIONE EN ANDROID
 ionic platform add adroid
+GENERA EL ICONO Y EL SLASH PARA LA APP
 ionic resources
+MUESTRA LIVE RELOAD DEL PROYECTO CON VISTA DE CELULAR
 ionic serve -l
+CREA PAGINA
 ionic g page miPagina
+
+
+
+TAREAS
+Agregar validacion de nombre de usuario
+Destildar radio

@@ -19,9 +19,10 @@ export class HomePage {
   irGame(nombre){
     this.storage.ready().then(() => {
       //GUARDADO DEL NOMBRE EN BASE DE DATOS
-      this.storage.set('nombre', nombre);
-      //REDIRECCION A PAGINA GAME
-      this.navCtrl.push(Game);
+      this.storage.set('nombre', nombre).then((val) => {
+        //REDIRECCION A PAGINA GAME
+        this.navCtrl.push(Game);
+      });      
     });
   }
 
