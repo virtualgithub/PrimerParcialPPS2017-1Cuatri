@@ -7,8 +7,7 @@ import { Game } from '../game/game';
 
 @Component({
   selector: 'page-home',
-  templateUrl: 'home.html',
-
+  templateUrl: 'home.html'
 })
 export class HomePage {
 

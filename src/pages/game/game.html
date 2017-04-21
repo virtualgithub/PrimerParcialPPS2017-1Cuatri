@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{nombre}}, pregunta N°{{numeroPregunta}} de 3</ion-title>
+    <ion-title>{{nombre}}, pregunta {{numeroPregunta}} de 3</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -16,15 +16,15 @@
 
       <ion-item>
         <ion-label>{{opcion1}}</ion-label>
-        <ion-radio value="1" [checked]={{limpia}} (ionSelect)="Jugar($event)"></ion-radio>
+        <ion-radio value="1" (ionSelect)="Jugar($event)"></ion-radio>
       </ion-item>
       <ion-item>
         <ion-label>{{opcion2}}</ion-label>
         <ion-radio value="2" (ionSelect)="Jugar($event)"></ion-radio>
       </ion-item>
       <ion-item>
-        <ion-label>{{opcion2}}</ion-label>
-        <ion-radio value="3" (ionSelect)="Jugar($event)"></ion-radio>
+        <ion-label>{{opcion3}}</ion-label>
+        <ion-radio value="3" (ionSelect)="Jugar($event)" #tercero></ion-radio>
       </ion-item>
 
     </ion-list>
