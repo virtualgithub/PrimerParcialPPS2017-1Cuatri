@@ -9,13 +9,15 @@ import { About } from '../pages/about/about';
 import { Game } from '../pages/game/game';
 import { HomePage } from '../pages/home/home';
 import { MyApp } from './app.component';
+import { Results } from '../pages/results/results';
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     About,
-    Game
+    Game,
+    Results
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,8 @@ import { MyApp } from './app.component';
     MyApp,
     HomePage,
     About,
-    Game
+    Game,
+    Results
   ],
   providers: [
     StatusBar,

@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{jugadas[0].nombreJugador}}, pregunta {{numeroPregunta}} de 3</ion-title>
+    <ion-title *ngIf="numeroPregunta != 4">{{nombreJugador}}, pregunta {{numeroPregunta}} de 3</ion-title>
   </ion-navbar>
 
 </ion-header>

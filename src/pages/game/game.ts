@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController} from 'ionic-angular';
+import { IonicPage, NavController, ToastController} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { FormGroup, FormControl } from '@angular/forms';
-import { ToastController } from 'ionic-angular';
 
 import { Jugada } from "../../classes/jugada";
 import { Cuestionario } from "../../classes/cuestionario";
-
-
+import { Respuesta } from "../../classes/respuesta";
+import { Results } from "../results/results";
 
 @IonicPage()
 @Component({
@@ -27,6 +26,8 @@ export class Game {
   numeroCorrectas : number = 0;
   numeroIncorrectas : number = 0;
 
+  nombreJugador : string;
+
   constructor(
     //NAVEGACIÓN
     public navCtrl: NavController,
@@ -34,8 +35,14 @@ export class Game {
     private storage: Storage,
     //TOAST (AVISO SUTIL EN PANTALLA)
     private toastCtrl: ToastController) {
-      //CARGA DEL ARRAY DE JUGADAS CON EL HISTORIAL DE JUGADAS
-      this.storage.get('jugadas').then((val) => {this.jugadas = JSON.parse(val);});
+      //PREPARACIÓN DEL ALMACENAMIENTO
+      this.storage.ready().then(() => {
+        //CARGA DEL ARRAY DE JUGADAS CON EL HISTORIAL DE JUGADAS
+        this.storage.get('jugadas').then((val) => {
+          this.jugadas = JSON.parse(val);
+          this.nombreJugador = this.jugadas[0].nombreJugador;
+        });
+      });
       //CREACIÓN DEL FORMULARIO CON EL FORM CONTROL CORRESPONDIENTE
       this.formCuestionario = new FormGroup({"listaOpciones": new FormControl()});
       //CREACIÓN DEL ARRAY DE CUESTIONARIOS
@@ -112,8 +119,8 @@ export class Game {
     if (opcionElegida == this.cuestionario.opcionCorrecta) {
       //MENSAJE SUTIL EN MEDIO DE LA PANTALLA
       let toastCorrecto = this.toastCtrl.create({
-        message: 'Correcto!',
-        duration: 2000,
+        message: 'Correcto',
+        duration: 1000,
         position : "middle"
       });
       //MUESTRA EL MENSAJE SUTIL
@@ -124,8 +131,8 @@ export class Game {
     else {
       //MENSAJE SUTIL EN MEDIO DE LA PANTALLA
       let toastIncorrecto = this.toastCtrl.create({
-        message: 'Incorrecto!',
-        duration: 2000,
+        message: 'Incorrecto',
+        duration: 1000,
         position : "middle"
       });
       //MUESTRA EL MENSAJE SUTIL
@@ -134,33 +141,28 @@ export class Game {
       this.numeroIncorrectas++;
     }
     //GUARDADO DE RESPUESTA ELEGIDA
-    this.jugadas[0].respuestas[this.cuestionario.idPregunta] = opcionElegida;
-    //AUMENTO DEL NUMERO DE PREGUNTA EN EL TITULO
-    this.numeroPregunta++;
-    //REDIRECCION A PAGINA DE RESULTADOS
-    if (this.numeroPregunta === 4) {
-
-    }
+    this.jugadas[0].respuestas.push(new Respuesta(this.cuestionario.idPregunta, opcionElegida));
     //DEMORA DE 2 SEGUNDOS PARA GENERAR NUEVO CUESTIONARIO
-    setTimeout(() => {this.GenerarCuestionario()}, 2000);
-    //DEMORA DE 2 SEGUNDOS PARA RESETEAR RADIOBUTTONS
-    setTimeout(() => {this.formCuestionario.controls.listaOpciones.reset()}, 2000);
-  }
-
-  GuardarJugada(){
-    //DEMORA DE 2 SEGUNDOS PARA REDIRIGIR A RESULTADOS
     setTimeout(() => {
-      this.storage.ready().then(
-        //GUARDADO DEL NOMBRE EN BASE DE DATOS
-        () => {
-        this.storage.set('jugadas', nombre).then((val) => {
-          //REDIRECCION A PAGINA GAME
-          this.navCtrl.push(Results);
-        })
-      });      
-    }, 2000);
+      //AUMENTO DEL NUMERO DE PREGUNTA EN EL TITULO
+      this.numeroPregunta++;
+      if (this.numeroPregunta === 4) {
+        //PREPARACIÓN DEL ALMACENAMIENTO
+        this.storage.ready().then(() => {
+          //GUARDADO DE LAS JUGADAS EN BASE DE DATOS
+          this.storage.set('jugadas', JSON.stringify(this.jugadas)).then(() => {
+            //REDIRECCION A PAGINA DE RESULTADOS
+            this.navCtrl.push(Results);
+          });      
+        });
+      }
+      else{
+        //GENERA NUEVO CUESTIONARIO
+        this.GenerarCuestionario();
+        //DEMORA DE 2 SEGUNDOS PARA RESETEAR RADIOBUTTONS
+        this.formCuestionario.controls.listaOpciones.reset();
+      }
+    //QUE DEMORE 500 MILISEGUNDOS
+    }, 500);
   }
 }
-
-var val = JSON.parse(profile)
-JSON.stringify(this._profile);

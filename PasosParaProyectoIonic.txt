@@ -15,3 +15,4 @@ ionic g page miPagina
 
 TAREAS
 Agregar validacion de nombre de usuario
+Mudar cuestionarios a pagina aparte

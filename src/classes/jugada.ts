@@ -4,15 +4,15 @@ import { Respuesta } from "./respuesta";
 export class Jugada {
   nombreJugador : string;
   respuestas : Respuesta[];
-  numeroPreguntas : number;
 
   constructor(nombre : string){
     this.nombreJugador = nombre;
+    this.respuestas = Array();
   }
   //CREA JUGADA AL PRINCIPIO DEL ARRAY DE JUGADAS
-  AgregarJugada(jugadas : Jugada[]){
+  AgregarJugada(jugadas : Jugada[]) : Jugada[] {
     //CASO EN EL QUE SE HA LLEGADO AL MÁXIMO (5) DE JUGADAS GUARDADAS
-    if (jugadas.length == this.numeroPreguntas) {
+    if (jugadas.length == 5) {
       //ELIMINACION DE LA JUGADA MÁS ANTIGUA (AL FINAL DEL ARRAY)
       jugadas.pop();
       //AGREGADO DE LA JUGADA ACTUAL (AL PRINCIPIO DEL ARRAY)
@@ -22,7 +22,9 @@ export class Jugada {
     else{
       jugadas.unshift(this);
     }
+    return jugadas;
   }
+
   AgregarRespuesta(idPreguntaBuscada, idRespuestaAgregada){
     this.respuestas.forEach(element => {
       if (element.idPregunta == idPreguntaBuscada) {
@@ -30,6 +32,6 @@ export class Jugada {
         return;
       }
     });
-    this.respuestas.push(new Respuesta(idPreguntaBuscada, idRespuestaAgregada))
+    this.respuestas.push(new Respuesta(idPreguntaBuscada, idRespuestaAgregada));
   }
 }
