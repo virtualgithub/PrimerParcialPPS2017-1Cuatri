@@ -15,4 +15,6 @@ ionic g page miPagina
 
 TAREAS
 Agregar validacion de nombre de usuario
-Mudar cuestionarios a pagina aparte
+mostrar resultado del juego
+ir mostrando lo que otros jugadores eligieron
+resolver problema de que se acaban las preguntas cuando voy hacia atras

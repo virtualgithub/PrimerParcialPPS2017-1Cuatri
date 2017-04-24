@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl } from '@angular/forms';
 import { IonicPage, NavController, ToastController} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { FormGroup, FormControl } from '@angular/forms';
 
-import { Jugada } from "../../classes/jugada";
 import { Cuestionario } from "../../classes/cuestionario";
+import { CuestionarioService } from "../../classes/cuestionario.service";
+import { Jugada } from "../../classes/jugada";
 import { Respuesta } from "../../classes/respuesta";
 import { Results } from "../results/results";
 
@@ -12,8 +13,9 @@ import { Results } from "../results/results";
 @Component({
   selector: 'page-game',
   templateUrl: 'game.html',
+  providers: [CuestionarioService]
 })
-export class Game {
+export class Game implements OnInit{
   jugadas : Jugada[];
 
   cuestionarios : Cuestionario[];
@@ -23,9 +25,6 @@ export class Game {
   listaOpciones : FormControl;
 
   numeroPregunta : number = 1;
-  numeroCorrectas : number = 0;
-  numeroIncorrectas : number = 0;
-
   nombreJugador : string;
 
   constructor(
@@ -34,78 +33,33 @@ export class Game {
     //ALMACENAMIENTO PERSISTENTE
     private storage: Storage,
     //TOAST (AVISO SUTIL EN PANTALLA)
-    private toastCtrl: ToastController) {
+    private toastCtrl: ToastController,
+    //SERVICIO QUE DEVUELVE LOS CUESTIONARIOS
+    private cuestionarioService: CuestionarioService) {
       //PREPARACIÓN DEL ALMACENAMIENTO
       this.storage.ready().then(() => {
         //CARGA DEL ARRAY DE JUGADAS CON EL HISTORIAL DE JUGADAS
         this.storage.get('jugadas').then((val) => {
+          //TRADUCCION DEL JSON DEVUELTO Y ASIGNACIÓN A VARIABLE JUGADAS
           this.jugadas = JSON.parse(val);
+          //OBTENCIÓN DEL NOMBRE DEL JUGADOR
           this.nombreJugador = this.jugadas[0].nombreJugador;
         });
       });
       //CREACIÓN DEL FORMULARIO CON EL FORM CONTROL CORRESPONDIENTE
       this.formCuestionario = new FormGroup({"listaOpciones": new FormControl()});
-      //CREACIÓN DEL ARRAY DE CUESTIONARIOS
-      this.cuestionarios = [
-        {
-          idPregunta : 0,
-          pregunta : "¿Cuál es la capital de Noruega?",
-          opcion1 : "Estocolmo",
-          opcion2 : "Oslo",
-          opcion3 : "Helsinki",
-          opcionCorrecta : 2
-        },
-        {
-          idPregunta : 1,
-          pregunta : "¿Cuántos huevos hay en 7 docenas?",
-          opcion1 : "74",
-          opcion2 : "94",
-          opcion3 : "84",
-          opcionCorrecta : 3
-        },
-        {
-          idPregunta : 2,
-          pregunta : "¿Quién fue el 3° presidente de Argentina?",
-          opcion1 : "Justo José de Urquiza",
-          opcion2 : "Bernardino Rivadavia",
-          opcion3 : "Vicente López y Planes",
-          opcionCorrecta : 1
-        },
-        {
-          idPregunta : 3,
-          pregunta : "¿En qué año se instaló el 1° semáforo?",
-          opcion1 : "1868",
-          opcion2 : "1968",
-          opcion3 : "1986",
-          opcionCorrecta : 1
-        },
-        {
-          idPregunta : 4,
-          pregunta : "¿Por qué en buceo se tiran hacia atrás?",
-          opcion1 : "Por costumbre",
-          opcion2 : "Por seguridad",
-          opcion3 : "Si se tiran hacia adelante caen en el bote",
-          opcionCorrecta : 2
-        },
-        {
-          idPregunta : 5,
-          pregunta : "Si un abogado enloquece, ¿Pierde el juicio?",
-          opcion1 : "No",
-          opcion2 : "Si",
-          opcion3 : "Quizás",
-          opcionCorrecta : 2
-        },
-        {
-          idPregunta : 6,
-          pregunta : "¿Cómo descargar más RAM?",
-          opcion1 : "Usando Google.es",
-          opcion2 : "mmm...",
-          opcion3 : "Usando Feisbuc",
-          opcionCorrecta : 0
-        }
-      ];
+  }
+  //OBTENCIÓN DEL ARRAY DE CUESTIONARIOS Y ASIGNACIÓN A VARIABLE LOCAL CUESTIONARIOS
+  getCuestionarios(): void {
+    this.cuestionarioService.getCuestionarios().then((val) =>{
+      this.cuestionarios = val;
       //GENERACIÓN INICIAL DE CUESTIONARIO
       this.GenerarCuestionario();
+    });
+  }
+  //LIFECYCLE HOOK (FUNCION QUE SE EJECUTA AL CREAR EL COMPONENTE)
+  ngOnInit(): void {
+    this.getCuestionarios();
   }
   GenerarCuestionario(){
     //ELECCION RANDOM DE CUESTIONARIO
@@ -121,24 +75,24 @@ export class Game {
       let toastCorrecto = this.toastCtrl.create({
         message: 'Correcto',
         duration: 1000,
-        position : "middle"
+        position : "bottom"
       });
       //MUESTRA EL MENSAJE SUTIL
       toastCorrecto.present();
       //AUMENTO DE NUMERO DE RESPUESTAS INCORRECTAS (PIE DE PAGINA)
-      this.numeroCorrectas++;
+      this.jugadas[0].cantidadRespuestasCorrectas++;
     }
     else {
       //MENSAJE SUTIL EN MEDIO DE LA PANTALLA
       let toastIncorrecto = this.toastCtrl.create({
         message: 'Incorrecto',
         duration: 1000,
-        position : "middle"
+        position : "bottom"
       });
       //MUESTRA EL MENSAJE SUTIL
       toastIncorrecto.present();
       //AUMENTO DE NUMERO DE RESPUESTAS INCORRECTAS (PIE DE PAGINA)
-      this.numeroIncorrectas++;
+      this.jugadas[0].cantidadRespuestasIncorrectas++;
     }
     //GUARDADO DE RESPUESTA ELEGIDA
     this.jugadas[0].respuestas.push(new Respuesta(this.cuestionario.idPregunta, opcionElegida));
@@ -151,8 +105,8 @@ export class Game {
         this.storage.ready().then(() => {
           //GUARDADO DE LAS JUGADAS EN BASE DE DATOS
           this.storage.set('jugadas', JSON.stringify(this.jugadas)).then(() => {
-            //REDIRECCION A PAGINA DE RESULTADOS
-            this.navCtrl.push(Results);
+            //REDIRECCION A PAGINA DE RESULTADOS (SETEO COMO PAGINA INICIAL)
+            this.navCtrl.setRoot(Results, {}, {animate: true, direction: "forward"});
           });      
         });
       }

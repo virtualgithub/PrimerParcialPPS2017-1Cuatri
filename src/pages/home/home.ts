@@ -19,7 +19,7 @@ export class HomePage {
     //PREPARACIÓN DEL ALMACENAMIENTO
     this.storage.ready().then(() => {
       //OBTENCIÓN DE JUGADAS DESDE EL STORAGE HACIA EL ARRAY LOCAL
-      this.storage.clear();//////////////////////////////////////////////////borrar para historial
+      this.storage.clear();////////////////////////////////////////////////////////////borrar para historial
       this.storage.get('jugadas').then((val) => {
         if(val === null){
           return;
@@ -36,8 +36,8 @@ export class HomePage {
     this.storage.ready().then(() => {
       //GUARDADO DE LAS JUGADAS EN BASE DE DATOS
       this.storage.set('jugadas', JSON.stringify(this.jugadas)).then(() => {
-        //REDIRECCION A PAGINA GAME
-        this.navCtrl.push(Game);
+        //REDIRECCION A PAGINA DE GAME (SETEO COMO PAGINA INICIAL)
+        this.navCtrl.setRoot(Game, {}, {animate: true, direction: "forward"});
       });      
     });
   }

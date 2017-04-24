@@ -4,10 +4,14 @@ import { Respuesta } from "./respuesta";
 export class Jugada {
   nombreJugador : string;
   respuestas : Respuesta[];
+  cantidadRespuestasCorrectas : number;
+  cantidadRespuestasIncorrectas : number;
 
   constructor(nombre : string){
     this.nombreJugador = nombre;
     this.respuestas = Array();
+    this.cantidadRespuestasCorrectas = 0;
+    this.cantidadRespuestasIncorrectas = 0;;
   }
   //CREA JUGADA AL PRINCIPIO DEL ARRAY DE JUGADAS
   AgregarJugada(jugadas : Jugada[]) : Jugada[] {
