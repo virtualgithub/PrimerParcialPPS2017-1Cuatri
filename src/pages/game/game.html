@@ -9,16 +9,13 @@
 <ion-content padding scrollbar-y-auto>
   <form [formGroup]="formCuestionario">
     <ion-list radio-group formControlName="listaOpciones">
-
       <ion-list-header>
         {{cuestionario?.pregunta}}
       </ion-list-header>
-
       <ion-item *ngFor='let opcion of cuestionario?.opciones; let index = index'>
         <ion-label>{{opcion}}</ion-label>
         <ion-radio [value]="index + 1" (ionSelect)="Jugar($event)"></ion-radio>
       </ion-item>
-
     </ion-list>
   </form>
 </ion-content>

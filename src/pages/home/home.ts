@@ -18,17 +18,15 @@ export class HomePage {
     this.jugadas = new Array();
     //PREPARACIÓN DEL ALMACENAMIENTO
     this.storage.ready().then(() => {
-      //OBTENCIÓN DE JUGADAS DESDE EL STORAGE HACIA EL ARRAY LOCAL
-      this.storage.clear();////////////////////////////////////////////////////////////borrar para historial
       this.storage.get('jugadas').then((val) => {
         if(val === null){
           return;
         }
-        this.jugadas = val;
+        this.jugadas = JSON.parse(val);
       });
     });
   }
-  
+
   irGame(nombre){
     //CREACIÓN DE JUGADA Y AGREGADO DE JUGADA EN ARRAY DE JUGADAS
     new Jugada(nombre).AgregarJugada(this.jugadas);

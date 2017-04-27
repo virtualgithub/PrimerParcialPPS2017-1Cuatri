@@ -100,7 +100,7 @@ export class Game {
     }
     //GUARDADO DE RESPUESTA ELEGIDA
     this.jugadas[0].respuestas.push(new Respuesta(this.cuestionario.idPregunta, opcionElegida));
-    //DEMORA DE 2 SEGUNDOS PARA GENERAR NUEVO CUESTIONARIO
+    //DEMORA DE X MILISEGUNDOS PARA GENERAR NUEVO CUESTIONARIO
     setTimeout(() => {
       //AUMENTO DEL NUMERO DE PREGUNTA EN EL TITULO
       this.numeroPregunta++;
@@ -117,10 +117,10 @@ export class Game {
       else{
         //GENERA NUEVO CUESTIONARIO
         this.GenerarCuestionario();
-        //DEMORA DE 2 SEGUNDOS PARA RESETEAR RADIOBUTTONS
+        //RESETEA RADIOBUTTONS
         this.formCuestionario.controls.listaOpciones.reset();
       }
     //QUE DEMORE 500 MILISEGUNDOS
-    }, 500);
+    }, 200);
   }
 }

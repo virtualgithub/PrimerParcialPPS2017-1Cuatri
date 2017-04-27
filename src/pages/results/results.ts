@@ -55,9 +55,10 @@ export class Results {
   MostrarResultados(){
     //LOOP QUE RECORRE TODAS LAS RESPUESTAS DE LA JUGADA 0 (LA ACTUAL)
     for (let index = 0; index < this.jugadas[0].respuestas.length; index++) {
-      //ALMACENAMIENTO DEL ID DE CADA RESPUESTA REALIZADA
+      //ALMACENAMIENTO DEL ID DE CADA PREGUNTA REALIZADA
       let idPregunta = this.jugadas[0].respuestas[index].idPregunta;
-      let idRespuesta = this.jugadas[0].respuestas[index].idRespuesta;
+      //ALMACENAMIENTO DEL ID DE CADA RESPUESTA REALIZADA - 1 POR ARRAY INDEXADO EN 0
+      let idRespuesta = this.jugadas[0].respuestas[index].idRespuesta - 1;
       //LOOP QUE RECORRE TODO EL CUESTIONARIO
       for (let index2 = 0; 2 < this.cuestionarios.length; index2++) {
         //BUSQUEDA DE LA PREGUNTA EN EL ARRAY DE CUESTIONARIOS
@@ -65,7 +66,8 @@ export class Results {
           //ALMACENAMIENTO DE LA PREGUNTA EN EL ARRAY LOCAL DE PREGUNTASRESPUESTAS
           this.preguntasRespuestas.push({
             pregunta : this.cuestionarios[index2].pregunta,
-            respuesta : this.cuestionarios[index2].opciones[idRespuesta]
+            respuesta : this.cuestionarios[index2].opciones[idRespuesta],
+            correcta : this.cuestionarios[index2].opcionCorrecta === idRespuesta ? '#32db64' : '#f53d3d'
           });
           break;
         }
