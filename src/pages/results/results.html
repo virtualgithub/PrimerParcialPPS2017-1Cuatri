@@ -14,15 +14,8 @@
       <button ion-button icon-left (click)="irHome()"><ion-icon name="refresh"></ion-icon>Volver a jugar</button>
     </ion-col>
   </ion-row>
-
-  <ion-item-group>
-    <ion-item-divider color="light" *ngFor="let pregunta of preguntas">{{pregunta}}</ion-item-divider>
-    <ion-item>
-      Respuesta usuario
-    </ion-item>
-    <ion-item-divider color="light">Pregunta2</ion-item-divider>
-    <ion-item >
-      Respuesta usuario2
-    </ion-item>
+  <ion-item-group *ngFor='let value of preguntasRespuestas'>
+      <ion-item-divider color="light">{{value.pregunta}}</ion-item-divider>
+      <ion-item>{{value.respuesta}}</ion-item>
   </ion-item-group>
 </ion-content>

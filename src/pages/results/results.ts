@@ -14,11 +14,11 @@ import { Respuesta } from "../../classes/respuesta";
   templateUrl: 'results.html',
   providers: [CuestionarioService]
 })
-export class Results implements OnInit{
+export class Results {
   jugadas : Jugada[];
   nombreJugador : string;
   cuestionarios : Cuestionario[];
-  preguntas : string[];
+  preguntasRespuestas : any[];
 
   constructor(
     public navCtrl: NavController,
@@ -27,29 +27,25 @@ export class Results implements OnInit{
     //ALMACENAMIENTO PERSISTENTE
     private storage: Storage) {
       //INCIALIZACIÓN DE ARRAY PREGUNTAS
-      this.preguntas = Array();
+      this.preguntasRespuestas = Array();
       //PREPARACIÓN DEL ALMACENAMIENTO
-      this.storage.ready().then(() => {
+      this.storage.ready()
+      .then(() => {
         //CARGA DEL ARRAY DE JUGADAS CON EL HISTORIAL DE JUGADAS
         this.storage.get('jugadas').then((val) => {
           //TRADUCCION DEL JSON DEVUELTO Y ASIGNACIÓN A VARIABLE JUGADAS
           this.jugadas = JSON.parse(val);
           //OBTENCIÓN DEL NOMBRE DEL JUGADOR
           this.nombreJugador = this.jugadas[0].nombreJugador;
-          this.getCuestionarios().then(() => this.MostrarResultados());
+          //OBTENCIÓN DEL ARRAY DE CUESTIONARIOS
+          this.cuestionarioService.getCuestionarios().then((val) =>{
+            //ASIGNACIÓN A VARIABLE LOCAL CUESTIONARIOS
+            this.cuestionarios = val.slice();
+            //GENERACIÓN Y MUESTRA DE LOS RESULTADOS
+            this.MostrarResultados();
+          });
         });     
       });
-  }
-
-  //OBTENCIÓN DEL ARRAY DE CUESTIONARIOS Y ASIGNACIÓN A VARIABLE LOCAL CUESTIONARIOS
-  getCuestionarios() {
-    return this.cuestionarioService.getCuestionarios().then((val) =>{
-      this.cuestionarios = val;
-    });
-  }
-  //LIFECYCLE HOOK (FUNCION QUE SE EJECUTA AL CREAR EL COMPONENTE)
-  ngOnInit(): void {
-    
   }
   //REDIRECCION A PAGINA DE HOME (SETEO COMO PAGINA INICIAL)
   irHome(nombre){
@@ -57,15 +53,22 @@ export class Results implements OnInit{
   }
 
   MostrarResultados(){
-    let cantidadRespuestas : number = this.jugadas[0].respuestas.length;
     //LOOP QUE RECORRE TODAS LAS RESPUESTAS DE LA JUGADA 0 (LA ACTUAL)
-    for (let index = 0; index < cantidadRespuestas; index++) {
+    for (let index = 0; index < this.jugadas[0].respuestas.length; index++) {
+      //ALMACENAMIENTO DEL ID DE CADA RESPUESTA REALIZADA
       let idPregunta = this.jugadas[0].respuestas[index].idPregunta;
-      let cantidadCuestionarios : number = this.cuestionarios.length;
-      for (let index2 = 0; index2 < cantidadCuestionarios; index2++) {
+      let idRespuesta = this.jugadas[0].respuestas[index].idRespuesta;
+      //LOOP QUE RECORRE TODO EL CUESTIONARIO
+      for (let index2 = 0; 2 < this.cuestionarios.length; index2++) {
+        //BUSQUEDA DE LA PREGUNTA EN EL ARRAY DE CUESTIONARIOS
         if (idPregunta === this.cuestionarios[index2].idPregunta) {
-          this.preguntas.push(this.cuestionarios[index2].pregunta);
-        }        
+          //ALMACENAMIENTO DE LA PREGUNTA EN EL ARRAY LOCAL DE PREGUNTASRESPUESTAS
+          this.preguntasRespuestas.push({
+            pregunta : this.cuestionarios[index2].pregunta,
+            respuesta : this.cuestionarios[index2].opciones[idRespuesta]
+          });
+          break;
+        }
       }
     }
   }

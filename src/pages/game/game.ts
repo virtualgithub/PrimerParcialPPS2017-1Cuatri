@@ -15,7 +15,7 @@ import { Results } from "../results/results";
   templateUrl: 'game.html',
   providers: [CuestionarioService]
 })
-export class Game implements OnInit{
+export class Game {
   jugadas : Jugada[];
 
   cuestionarios : Cuestionario[];
@@ -36,31 +36,34 @@ export class Game implements OnInit{
     private toastCtrl: ToastController,
     //SERVICIO QUE DEVUELVE LOS CUESTIONARIOS
     private cuestionarioService: CuestionarioService) {
-      //PREPARACIÓN DEL ALMACENAMIENTO
-      this.storage.ready().then(() => {
-        //CARGA DEL ARRAY DE JUGADAS CON EL HISTORIAL DE JUGADAS
-        this.storage.get('jugadas').then((val) => {
-          //TRADUCCION DEL JSON DEVUELTO Y ASIGNACIÓN A VARIABLE JUGADAS
-          this.jugadas = JSON.parse(val);
-          //OBTENCIÓN DEL NOMBRE DEL JUGADOR
-          this.nombreJugador = this.jugadas[0].nombreJugador;
-        });
-      });
       //CREACIÓN DEL FORMULARIO CON EL FORM CONTROL CORRESPONDIENTE
       this.formCuestionario = new FormGroup({"listaOpciones": new FormControl()});
   }
-  //OBTENCIÓN DEL ARRAY DE CUESTIONARIOS Y ASIGNACIÓN A VARIABLE LOCAL CUESTIONARIOS
+  //OBTENCIÓN DE LAS JUGADAS Y DE UN NUEVO CUESTIONARIO CADA VEZ QUE SE CARGA LA PÁGINA
+  ionViewDidLoad(){
+    //PREPARACIÓN DEL ALMACENAMIENTO
+    this.storage.ready().then(() => {
+      //CARGA DEL ARRAY DE JUGADAS CON EL HISTORIAL DE JUGADAS
+      this.storage.get('jugadas').then((val) => {
+        //TRADUCCION DEL JSON DEVUELTO Y ASIGNACIÓN A VARIABLE JUGADAS
+        this.jugadas = JSON.parse(val);
+        //OBTENCIÓN DEL NOMBRE DEL JUGADOR
+        this.nombreJugador = this.jugadas[0].nombreJugador;
+        //OBTENCIÓN DE UN NUEVO CUESTIONARIO
+        this.getCuestionarios();
+      });
+    });
+  }
+  //OBTENCIÓN DEL ARRAY DE CUESTIONARIOS
   getCuestionarios(): void {
     this.cuestionarioService.getCuestionarios().then((val) =>{
-      this.cuestionarios = val;
+      //COPIA DEL ARRAY A VARIABLE LOCAL CUESTIONARIOS
+      this.cuestionarios = val.slice();
       //GENERACIÓN INICIAL DE CUESTIONARIO
       this.GenerarCuestionario();
     });
   }
-  //LIFECYCLE HOOK (FUNCION QUE SE EJECUTA AL CREAR EL COMPONENTE)
-  ngOnInit(): void {
-    this.getCuestionarios();
-  }
+  //SELECCIÓN DE UN CUESTIONARIO ALEATORIO
   GenerarCuestionario(){
     //ELECCION RANDOM DE CUESTIONARIO
     let cuestionarioNumero : number = Math.floor((Math.random() * this.cuestionarios.length) + 0);
@@ -69,6 +72,7 @@ export class Game implements OnInit{
     //ELIMINACION DE LA PREGUNTA USADA
     this.cuestionarios.splice(cuestionarioNumero, 1);
   }
+  
   Jugar(opcionElegida : number){
     if (opcionElegida == this.cuestionario.opcionCorrecta) {
       //MENSAJE SUTIL EN MEDIO DE LA PANTALLA
