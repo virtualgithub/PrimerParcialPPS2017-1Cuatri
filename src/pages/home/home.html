@@ -6,17 +6,25 @@
   </ion-navbar>
 </ion-header>
 <ion-content padding scrollbar-y-auto logIn>
-  <ion-list inset>
-    <ion-item>
-      <ion-input #nombre type="text" placeholder="Nombre del jugador"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-row>
-        <ion-col class="textoCentrado">
-          <button ion-button icon-left (click)="irGame(nombre.value)"><ion-icon name="logo-xbox"></ion-icon>Iniciar trivia</button>
-        </ion-col>
-      </ion-row>
-    </ion-item>
-  </ion-list>  
+<!--INDICACIÓN DE CUAL ES EL FORMGROUP DEL COMPONENTE PARA ESTE FORM-->
+  <form [formGroup]="miForm">
+    <ion-list inset>
+      <!--AVISO DE ERROR SI LA VARIABLE errorEnFormulario ESTÁ SETEADA EN TRUE-->
+      <p *ngIf="errorEnFormulario" style="color: #ea6153;">El nombre es obligatorio y debe contener solo letras hasta un máximo de 30.</p>
+      <ion-item>
+        <ion-input type="text" formControlName="nombre" placeholder="Nombre del jugador"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-row>
+          <ion-col class="textoCentrado">
+            <button ion-button icon-left (click)="irGame()"><ion-icon name="logo-xbox"></ion-icon>Iniciar trivia</button>
+          </ion-col>
+        </ion-row>
+      </ion-item>
+    </ion-list>
+  </form>
+ 
+  
   <button ion-button id="botonAbout" icon-left (click)="irAbout()"><ion-icon name="information-circle"></ion-icon>Sobre el autor</button>
+
 </ion-content>
