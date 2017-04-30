@@ -57,8 +57,8 @@ export class Results {
     for (let index = 0; index < this.jugadas[0].respuestas.length; index++) {
       //ALMACENAMIENTO DEL ID DE CADA PREGUNTA REALIZADA
       let idPregunta = this.jugadas[0].respuestas[index].idPregunta;
-      //ALMACENAMIENTO DEL ID DE CADA RESPUESTA REALIZADA - 1 POR ARRAY INDEXADO EN 0
-      let idRespuesta = this.jugadas[0].respuestas[index].idRespuesta - 1;
+      //ALMACENAMIENTO DEL ID DE CADA RESPUESTA REALIZADA
+      let idRespuesta = this.jugadas[0].respuestas[index].idRespuesta;
       //LOOP QUE RECORRE TODO EL CUESTIONARIO
       for (let index2 = 0; 2 < this.cuestionarios.length; index2++) {
         //BUSQUEDA DE LA PREGUNTA EN EL ARRAY DE CUESTIONARIOS

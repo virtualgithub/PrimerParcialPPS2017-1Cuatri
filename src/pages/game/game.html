@@ -8,14 +8,29 @@
 
 <ion-content padding scrollbar-y-auto>
   <form [formGroup]="formCuestionario">
+
     <ion-list radio-group formControlName="listaOpciones">
       <ion-list-header>
         {{cuestionario?.pregunta}}
       </ion-list-header>
       <ion-item *ngFor='let opcion of cuestionario?.opciones; let index = index'>
         <ion-label>{{opcion}}</ion-label>
-        <ion-radio [value]="index + 1" (ionSelect)="Jugar($event)"></ion-radio>
+        <ion-radio [value]="index" (ionSelect)="Jugar($event)"></ion-radio>
       </ion-item>
     </ion-list>
+
+    <div *ngIf="otrosRespondieron.length > 0">
+      <hr/>
+      <ion-list>
+        <ion-list-header>Otros respondieron...</ion-list-header>
+        <ion-item *ngFor='let otraRespuesta of otrosRespondieron'>
+          <ion-avatar item-left>
+            <img src="assets/img/{{GenerarNumeroAleatorio()}}.jpg">
+          </ion-avatar>
+          <h2>{{otraRespuesta.nombreJugador}}</h2>
+          <p>{{otraRespuesta.respuesta}}</p>
+        </ion-item>
+      </ion-list>
+    </div>
   </form>
 </ion-content>
