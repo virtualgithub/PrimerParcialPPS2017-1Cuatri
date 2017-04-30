@@ -19,18 +19,16 @@
       </ion-item>
     </ion-list>
 
-    <div *ngIf="otrosRespondieron.length > 0">
-      <hr/>
-      <ion-list>
-        <ion-list-header>Otros respondieron...</ion-list-header>
-        <ion-item *ngFor='let otraRespuesta of otrosRespondieron'>
-          <ion-avatar item-left>
-            <img src="assets/img/{{GenerarNumeroAleatorio()}}.jpg">
-          </ion-avatar>
-          <h2>{{otraRespuesta.nombreJugador}}</h2>
-          <p>{{otraRespuesta.respuesta}}</p>
-        </ion-item>
-      </ion-list>
-    </div>
+    <ion-list *ngIf="otrosRespondieron.length > 0">
+      <ion-item>Otros respondieron...</ion-item>
+      <ion-item *ngFor='let otraRespuesta of otrosRespondieron'>
+        <ion-avatar item-left>
+          <img src={{otraRespuesta.pathImagen}}>
+        </ion-avatar>
+        <h2>{{otraRespuesta.nombreJugador}}</h2>
+        <p>{{otraRespuesta.respuesta}}</p>
+      </ion-item>
+    </ion-list>
+    
   </form>
 </ion-content>

@@ -60,8 +60,6 @@ export class Game {
         this.jugadas = JSON.parse(val);
         //OBTENCIÓN DEL NOMBRE DEL JUGADOR
         this.nombreJugador = this.jugadas[0].nombreJugador;
-        //LIMPIEZA DE OTROSRESPONDIERON
-        this.otrosRespondieron = [];
         //OBTENCIÓN DE UN NUEVO CUESTIONARIO
         this.getCuestionarios();
       });
@@ -83,7 +81,7 @@ export class Game {
     //ASIGNACION DE LOS DATOS AL CUESTIONARIO
     this.cuestionario = this.cuestionarios[cuestionarioNumero];
     //GENERACIÓN DEL FORMULARIO 'OTROS RESPONDIERON' CON EL NUMERO DE FORMULARIO GENERADO RANDOMLY
-    //this.GenerarOtrosRespondieron(cuestionarioNumero);
+    this.GenerarOtrosRespondieron(cuestionarioNumero);
     //ELIMINACION DE LA PREGUNTA USADA
     this.cuestionarios.splice(cuestionarioNumero, 1);
   }
@@ -98,7 +96,9 @@ export class Game {
           //AGREGA LA RESPUESTA AL ARRAY DE OTROSRESPONDIERON PARA SER RECORRIDO EN EL TEMPLATE
           this.otrosRespondieron.push({
             nombreJugador : this.jugadas[index].nombreJugador,
-            respuesta : this.cuestionarios[cuestionarioNumero].opciones[this.jugadas[index].respuestas[index2].idRespuesta]})
+            respuesta : this.cuestionarios[cuestionarioNumero].opciones[this.jugadas[index].respuestas[index2].idRespuesta],
+            pathImagen : 'assets/img/' + this.GenerarNumeroAleatorio() + '.jpg'
+          })
         }
       }      
     }
@@ -139,6 +139,8 @@ export class Game {
     }
     //GUARDADO DE RESPUESTA ELEGIDA
     this.jugadas[0].respuestas.push(new Respuesta(this.cuestionario.idPregunta, opcionElegida));
+    //LIMPIEZA DE OTROSRESPONDIERON
+    this.otrosRespondieron = [];
     //DEMORA DE X MILISEGUNDOS PARA GENERAR NUEVO CUESTIONARIO
     setTimeout(() => {
       //AUMENTO DEL NUMERO DE PREGUNTA EN EL TITULO
